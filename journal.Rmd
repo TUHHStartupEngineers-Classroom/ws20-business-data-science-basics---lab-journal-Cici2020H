@@ -1,6 +1,6 @@
 ---
 title: "Journal (reproducible report)"
-author: "Cornelia Hofsäß"
+author: "Cornelia Hofsaess"
 date: "2020-12-03"
 output:
   html_document:
