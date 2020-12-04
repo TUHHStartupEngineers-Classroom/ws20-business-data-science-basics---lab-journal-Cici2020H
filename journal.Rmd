@@ -16,23 +16,37 @@ output:
 knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)
 ```
 
-**IMPORTANT:** You can delete everything in here and start fresh. You might want to start by not deleting anything above this line until you know what that stuff is doing.
+**Welcome to my page:** Let's have some fun with programming in R.
 
-This is an `.Rmd` file. It is plain text with special features. Any time you write just like this, it will be compiled to normal text in the website. If you put a \# in front of your text, it will create a top level-header.
+<img src="Images/IMG-20171225-WA0022.jpg" width="250" height="300" />
 
-# My first post
+![Christmas cat having fun](Images/IMG-20171225-WA0022.jpg =100x20)
+
+# Introduction to R
 
 Last compiled: `r Sys.Date()`
 
-Notice that whatever you define as a top level header, automatically gets put into the table of contents bar on the left. 
+Here, we try some basic commands in R.
+We can write some mathematical expressions, e.g.
+```{r}
+10 * 10
+99 + 1
+2 * 3
+4 - 1
+6 / (4 - 1)
 
-## Second level header
+```
 
-You can add more headers by adding more hashtags. These won't be put into the table of contents
+Additionally, we can define some functions. Lets program a function which throw a die....
 
-### third level header
-
-Here's an even lower level header
+```{r}
+roll <- function(faces = 1:6, nr_of_dices = 1) {
+  dice <- sample(faces, size = nr_of_dices, replace = TRUE)
+  sum(dice)
+}
+# Let's throw the die
+print('Let\'s throw the die once:',roll())
+```
 
 # My second post (note the order)
 
