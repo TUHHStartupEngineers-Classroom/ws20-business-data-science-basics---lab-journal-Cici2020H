@@ -414,7 +414,7 @@ div.tocify {
 <p><img src="images/IMG-20171225-WA0022.jpg" width="250" height="300" /></p>
 <div class="figure">
 <img src="Images/IMG-20171225-WA0022.jpg%20=100x20" alt="" />
-<p class="caption">Christmas cat having fun</p>
+<p class="caption">This is Roxi, a christmas cat having fun</p>
 </div>
 <div id="introduction-to-r" class="section level1">
 <h1><span class="header-section-number">1</span> Introduction to R</h1>
@@ -433,11 +433,45 @@ div.tocify {
 <p>Additionally, we can define some functions. Lets program a function which throw a die….</p>
 <pre class="r"><code>roll &lt;- function(faces = 1:6, nr_of_dices = 1) {
   dice &lt;- sample(faces, size = nr_of_dices, replace = TRUE)
-  sum(dice)
+  return(sum(dice)) 
 }
 # Let&#39;s throw the die
-print(&#39;Let\&#39;s throw the die once:&#39;,roll())</code></pre>
-<pre><code>## [1] &quot;Let&#39;s throw the die once:&quot;</code></pre>
+sprintf(&#39;Let\&#39;s throw the die once: %d&#39;,roll())</code></pre>
+<pre><code>## [1] &quot;Let&#39;s throw the die once: 2&quot;</code></pre>
+<pre class="r"><code>print(paste(&#39;And once again:&#39;, roll()))</code></pre>
+<pre><code>## [1] &quot;And once again: 3&quot;</code></pre>
+<pre class="r"><code>print(paste(&#39;And again:&#39;, roll()))</code></pre>
+<pre><code>## [1] &quot;And again: 2&quot;</code></pre>
+<p>I know, this is a lot of fun, but now we want to have a look at the distribution function, so let throw the dice many times and plot the histogram.</p>
+<pre class="r"><code>roll &lt;- function(faces = 1:6, nr_of_dices = 1, probs = c(1/6, 1/6, 1/6, 1/6, 1/6, 1/6)) {
+  dice &lt;- sample(faces, size = nr_of_dices,prob = probs ,replace = TRUE)
+  return(sum(dice)) 
+}
+# Let&#39;s throw the die 10000 times
+samples = replicate(n = 100000, roll(), simplify = TRUE)
+hist(samples)</code></pre>
+<p><img src="journal_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>That is such a nice histogram. Now, let’s play a game with Roxi, throwing a die three times, who throw the highest sum wins.</p>
+<pre class="r"><code>your_res = roll(nr_of_dices = 3)
+roxis_result = roll(nr_of_dices = 3, probs = c(0.05, 0.05, 0.05, 0.05, 0.05, 0.75))
+print(paste(&#39;Your turn:&#39;, your_res))</code></pre>
+<pre><code>## [1] &quot;Your turn: 13&quot;</code></pre>
+<pre class="r"><code>print(paste(&#39;Roxi throw:&#39;, roxis_result))</code></pre>
+<pre><code>## [1] &quot;Roxi throw: 18&quot;</code></pre>
+<pre class="r"><code>if (roxis_result &gt; your_res) {
+  print(&quot;Roxi wins, you looser!&quot;)
+} else if (roxis_result == your_res){
+  print(&quot;You both win!&quot;)
+} else {
+  print(&quot;You win!&quot;)
+}</code></pre>
+<pre><code>## [1] &quot;Roxi wins, you looser!&quot;</code></pre>
+<p>Roxi wins all the time, lets check the probability distribution function of Roxis die:</p>
+<pre class="r"><code>samples = replicate(n = 100000, roll(probs = c(0.05, 0.05, 0.05, 0.05, 0.05, 0.75)), simplify = TRUE)
+hist(samples)</code></pre>
+<p><img src="journal_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Thus, we see that Roxi uses a loaded die!</p>
+<p><img src="images/20170506_094357.jpg" width="291" height="324"/></p>
 </div>
 <div id="my-second-post-note-the-order" class="section level1">
 <h1><span class="header-section-number">2</span> My second post (note the order)</h1>
@@ -450,7 +484,7 @@ print(&#39;Let\&#39;s throw the die once:&#39;,roll())</code></pre>
 <p>So, let’s say you are learning how to make a histogram in R. For example, maybe you want to sample 100 numbers from a normal distribution with mean = 0, and standard deviation = 1, and then you want to plot a histogram. You can do this right here by using an r code block, like this:</p>
 <pre class="r"><code>samples &lt;- rnorm(100, mean=0, sd=1)
 hist(samples)</code></pre>
-<p><img src="journal_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="journal_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <p>When you knit this R Markdown document, you will see that the histogram is printed to the page, along with the R code. This document can be set up to hide the R code in the webpage, just delete the comment (hashtag) from the cold folding option in the yaml header up top. For purposes of letting yourself see the code, and me see the code, best to keep it the way that it is. You’ll learn that all of these things and more can be customized in each R code block.</p>
 </div>
 

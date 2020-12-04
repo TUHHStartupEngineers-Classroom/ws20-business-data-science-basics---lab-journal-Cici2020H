@@ -20,7 +20,7 @@ knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)
 
 <img src="Images/IMG-20171225-WA0022.jpg" width="250" height="300" />
 
-![Christmas cat having fun](Images/IMG-20171225-WA0022.jpg =100x20)
+![This is Roxi, a christmas cat having fun](Images/IMG-20171225-WA0022.jpg =100x20)
 
 # Introduction to R
 
@@ -42,11 +42,51 @@ Additionally, we can define some functions. Lets program a function which throw 
 ```{r}
 roll <- function(faces = 1:6, nr_of_dices = 1) {
   dice <- sample(faces, size = nr_of_dices, replace = TRUE)
-  sum(dice)
+  return(sum(dice)) 
 }
 # Let's throw the die
-print('Let\'s throw the die once:',roll())
+sprintf('Let\'s throw the die once: %d',roll())
+print(paste('And once again:', roll()))
+print(paste('And again:', roll()))
 ```
+I know, this is a lot of fun, but now we want to have a look at the distribution function, so let throw the dice many times and plot the histogram.
+
+```{r}
+roll <- function(faces = 1:6, nr_of_dices = 1, probs = c(1/6, 1/6, 1/6, 1/6, 1/6, 1/6)) {
+  dice <- sample(faces, size = nr_of_dices,prob = probs ,replace = TRUE)
+  return(sum(dice)) 
+}
+# Let's throw the die 10000 times
+samples = replicate(n = 100000, roll(), simplify = TRUE)
+hist(samples)
+
+```
+
+That is such a nice histogram. 
+Now, let's play a game with Roxi, throwing a die three times, who throw the highest sum wins.
+
+```{r}
+your_res = roll(nr_of_dices = 3)
+roxis_result = roll(nr_of_dices = 3, probs = c(0.05, 0.05, 0.05, 0.05, 0.05, 0.75))
+print(paste('Your turn:', your_res))
+print(paste('Roxi throw:', roxis_result))
+if (roxis_result > your_res) {
+  print("Roxi wins, you looser!")
+} else if (roxis_result == your_res){
+  print("You both win!")
+} else {
+  print("You win!")
+}
+```
+Roxi wins all the time, lets check the probability distribution function of Roxis die:
+```{r} 
+samples = replicate(n = 100000, roll(probs = c(0.05, 0.05, 0.05, 0.05, 0.05, 0.75)), simplify = TRUE)
+hist(samples)
+```
+
+Thus, we see that Roxi uses a loaded die!
+
+<img src="Images/20170506_094357.jpg" width="291" height="324"/>
 
 # My second post (note the order)
 
