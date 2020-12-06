@@ -1,0 +1,44 @@
+library("rvest")
+library("xopen")
+url_home = "https://www.rosebikes.de/fahrräder/mtb"
+
+#xopen(url_home)
+
+html_home <- read_html('https://www.rosebikes.de/fahrräder/mtb')
+
+# <div class="catalog-category-bikes__price">
+#   <div class="catalog-category-bikes__price-title">
+#   ab 1.699,00&nbsp;€
+
+bikes <- html_nodes(html_home, css = "li.catalog-category-bikes__list-item")
+names = list()
+prices = list()
+i=1
+for (bike in bikes){
+  name = html_text(html_node(bike,css="div.catalog-category-bikes__title"))
+  name = str_remove_all(name, "\n")
+  
+  price = html_text(html_node(bike, css="div.catalog-category-bikes__price-title"))
+  price = str_remove_all(price, "\nab")
+  price = str_remove_all(price, "\n")
+  price = str_remove_all(price, " ")
+  price = str_replace_all(price, "[.]","")
+  #price = str_replace_all(price, ",",".")
+  price = str_remove_all(price, "€")
+  
+  price_split = str_split(price, ",")[[1]]
+  if (length(price_split) ==2){
+    first = price_split[1]
+    last = substring(price_split[2],1,2)
+    price = paste0(first,'.',last)
+    price = as.numeric(price)
+  } else {
+    next
+  }
+  names[[i]] = name
+  prices[[i]] = price
+  i = i + 1
+}
+
+df = unnest(tibble(name = names, price = prices),cols=c(name,price))
+

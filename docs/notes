@@ -1,0 +1,223 @@
+<!-- <img src="Images/IMG-20171225-WA0022.jpg" width="250" height="300" /> -->
+
+<!-- ![This is Roxi, a christmas cat having fun](Images/IMG-20171225-WA0022.jpg =100x20) -->
+
+<!-- # Introduction to R -->
+
+<!-- Last compiled: `r Sys.Date()` -->
+
+<!-- Here, we try some basic commands in R. -->
+<!-- We can write some mathematical expressions, e.g. -->
+<!-- ```{r} -->
+<!-- 10 * 10 -->
+<!-- 99 + 1 -->
+<!-- 2 * 3 -->
+<!-- 4 - 1 -->
+<!-- 6 / (4 - 1) -->
+
+<!-- ``` -->
+
+<!-- Additionally, we can define some functions. Lets program a function which throw a die.... -->
+
+<!-- ```{r} -->
+<!-- roll <- function(faces = 1:6, nr_of_dices = 1) { -->
+<!--   dice <- sample(faces, size = nr_of_dices, replace = TRUE) -->
+<!--   return(sum(dice))  -->
+<!-- } -->
+<!-- # Let's throw the die -->
+<!-- sprintf('Let\'s throw the die once: %d',roll()) -->
+<!-- print(paste('And once again:', roll())) -->
+<!-- print(paste('And again:', roll())) -->
+<!-- ``` -->
+<!-- I know, this is a lot of fun, but now we want to have a look at the distribution function, so let throw the dice many times and plot the histogram. -->
+
+<!-- ```{r} -->
+<!-- roll <- function(faces = 1:6, nr_of_dices = 1, probs = c(1/6, 1/6, 1/6, 1/6, 1/6, 1/6)) { -->
+<!--   dice <- sample(faces, size = nr_of_dices,prob = probs ,replace = TRUE) -->
+<!--   return(sum(dice))  -->
+<!-- } -->
+<!-- # Let's throw the die 10000 times -->
+<!-- samples = replicate(n = 100000, roll(), simplify = TRUE) -->
+<!-- hist(samples) -->
+
+<!-- ``` -->
+
+<!-- That is such a nice histogram.  -->
+<!-- Now, let's play a game with Roxi, throwing a die three times, who throw the highest sum wins. -->
+
+<!-- ```{r} -->
+<!-- your_res = roll(nr_of_dices = 3) -->
+<!-- roxis_result = roll(nr_of_dices = 3, probs = c(0.05, 0.05, 0.05, 0.05, 0.05, 0.75)) -->
+<!-- print(paste('Your turn:', your_res)) -->
+<!-- print(paste('Roxi throw:', roxis_result)) -->
+<!-- if (roxis_result > your_res) { -->
+<!--   print("Roxi wins, you looser!") -->
+<!-- } else if (roxis_result == your_res){ -->
+<!--   print("You both win!") -->
+<!-- } else { -->
+<!--   print("You win!") -->
+<!-- } -->
+<!-- ``` -->
+<!-- Roxi wins all the time, lets check the probability distribution function of Roxis die: -->
+<!-- ```{r}  -->
+<!-- samples = replicate(n = 100000, roll(probs = c(0.05, 0.05, 0.05, 0.05, 0.05, 0.75)), simplify = TRUE) -->
+<!-- hist(samples) -->
+<!-- ``` -->
+
+<!-- Thus, we see that Roxi uses a loaded die! -->
+
+<!-- <img src="Images/20170506_094357.jpg" width="291" height="324"/> -->
+
+
+<!-- # Intro to tidyverse -->
+
+<!-- Last compiled: `r Sys.Date()` -->
+
+<!-- Now, we will have a look on different packages of R. From the lecture we learned that tidyverse is a colectionn of R packages, developed by RStudio’s chief scientist Hadley Wickham...  -->
+
+<!-- ## Install and load packages -->
+
+<!-- We install packages with typing: <br/> <center>**install.Packages("name_of_the_package") ** </center> <br/> -->
+<!-- in the R console. -->
+<!-- And we load the package with: -->
+<!-- <center>**library("name_of_the_package")** </center> <br/> -->
+<!-- We have installed the follwing packages: -->
+<!-- ```{r} -->
+<!-- # install.packages("fs") -->
+<!-- # pkgs <- c("readx1", "writex1", "tidyverse", "lubridate", "devtools") -->
+<!-- # install.packages(pkgs) -->
+<!-- ``` -->
+
+<!-- ## Pipes -->
+<!-- Instead of calling f(x), we will use the pipe operator x %>% f. -->
+
+<!-- ```{r} -->
+<!-- library("tidyverse") -->
+<!-- library("magrittr") -->
+<!-- iris %>% head(10) -->
+<!-- ``` -->
+
+<!-- instead of -->
+
+<!-- ```{r} -->
+<!-- head(iris, n=10) -->
+<!-- ``` -->
+<!-- For me, it is more confusing than helpful. But, maybe we will see the advantages later ;) -->
+
+
+<!-- ## Tibbles -->
+<!-- We learned in the lecture that tibbles are data frames. Lets check how the dataframes and tibbles differ. -->
+<!-- ```{r} -->
+<!-- library("tibble") -->
+<!-- tibble( -->
+<!--   x = 1:50, -->
+<!--   y = runif(50), -->
+<!--   z = x + y^2, -->
+<!--   outcome = rnorm(50) -->
+<!-- ) -->
+
+<!-- cars_dfr = data.frame(cars[1:20,]) -->
+<!-- cars_dfr -->
+<!-- cars_tbl <- as_tibble(cars[1:20,]) -->
+<!-- cars_tbl -->
+<!-- ``` -->
+<!-- As we can see, tibbles shows only the first 10 rows, compared to dataframes. <br> -->
+<!-- Now we want to access some columns in tibbles: -->
+<!-- ```{r} -->
+<!-- cars_tbl[['speed']] -->
+<!-- cars_tbl[[1]] -->
+<!-- cars_tbl$speed -->
+
+<!-- cars_dfr[['speed']] -->
+<!-- cars_dfr[[1]] -->
+<!-- cars_dfr$speed -->
+
+<!-- ``` -->
+<!-- Or using the pipes: -->
+<!-- Now we want to access some columns in tibbles: -->
+<!-- ```{r} -->
+<!-- cars_tbl %>% .[['dist']] -->
+<!-- cars_tbl %>% .[[2]] -->
+<!-- cars_tbl %>% .$speed -->
+<!-- ``` -->
+<!-- ## Import -->
+<!-- Use the following package to read different data fromats: -->
+
+<!-- * readr for reading flat files like .csv files  -->
+<!-- * readxl for .xls and .xlsx sheets.  -->
+<!-- * haven for SPSS, Stata, and SAS data.  -->
+<!-- * googledrive to interact with files on Google Drive from R.  -->
+
+
+<!-- ## Tidy -->
+<!-- Data are tidy if the rows represents the observation and the columns the variables (no redundancy). Each cell may only contain only one value! <br> -->
+<!-- Now, we will have a look on the diamond data set and will make it tidy... -->
+
+<!-- <center>**Shine bright like a diamond.**<\center> -->
+
+<!-- ```{r}  -->
+<!-- library("tidyverse") -->
+<!-- diamonds2 <- readRDS("data/diamonds2.rds") -->
+<!-- diamonds2 %>% head(n = 10) -->
+<!-- diamonds2 %>% pivot_longer(cols = c("2008","2009"), names_to = "year", values_to = "price") %>% head(n = 5) -->
+<!-- ``` -->
+<!-- Now the table looks so clean. -->
+
+<!-- ```{r}  -->
+<!-- diamonds3 <- readRDS("data/diamonds3.rds") -->
+<!-- diamonds3 %>% head(n = 10) -->
+<!-- #diamonds2 %>% pivot_longer(cols = c("2008","2009"), names -->
+<!-- ``` -->
+
+
+<!-- ```{r} -->
+<!-- # task one -->
+
+<!-- library("httr") -->
+<!-- library("jsonlite") -->
+<!-- library("tidyverse") -->
+
+
+<!-- # resp <- GET("https://swapi.dev/api/") -->
+<!-- # resp_as_list <- resp %>% .$content %>% rawToChar() %>% fromJSON() -->
+<!-- # resp_as_list2 <- content(resp, as = "parsed") -->
+<!-- # names_of_list = names(resp_as_list) -->
+<!-- # #rawToChar(resp$content) -->
+
+<!-- read <- function(url = "https://swapi.dev/api/"){ -->
+<!--   resp <- GET(url) -->
+<!--   content(resp, as = "parsed") -->
+<!--   resp_as_list <- resp %>% .$content %>% rawToChar() %>% fromJSON() -->
+<!--   return(resp_as_list) -->
+<!-- } -->
+
+<!-- res_as_list = read() -->
+<!-- names_of_list = names(res_as_list) -->
+<!-- df_list = list() -->
+<!-- for (names in 1:length(names_of_list)){ -->
+<!--   urls = res_as_list[names_of_list[names]]   -->
+<!--   content = read(urls[[1]]) -->
+<!--   counts = content$count -->
+
+<!--   observation = list() -->
+<!--   for (nr in 1:counts){ -->
+<!--     #print(nr) -->
+<!--     observation[[nr]] <- pivot_wider(enframe(read(paste0(urls[[1]],nr,"/")))) -->
+<!--       } -->
+<!--   df <- bind_rows(observation) -->
+<!--   df_list[[names]] = df -->
+<!-- } -->
+<!-- print(df) -->
+<!-- # View(df[[1]]) -->
+<!-- ``` -->
+
+<!-- <!-- ```{r} --> -->
+<!-- <!-- df_list[[1]] --> -->
+<!-- <!-- ``` --> -->
+
+<!-- <!-- ```{r} --> -->
+<!-- <!-- df_list[[1]] %>% head(n=10) --> -->
+<!-- <!-- ``` --> -->
+<!-- ## Transform -->
+
+<!-- ## Buisness case -->

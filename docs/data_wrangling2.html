@@ -9,10 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Joschka Schwarz" />
 
 
-<title>ggplot Graphs</title>
+<title>data_wrangling2.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -326,50 +325,24 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">ggplot Graphs</h1>
-<h4 class="author">Joschka Schwarz</h4>
-<h4 class="date">Nov 5, 2020</h4>
 
 </div>
 
 
-<p>The following code chunks will only print something, if you’ve installed the package <code>ggplot2</code>.</p>
-<p>Install it by running:</p>
-<pre class="r"><code>install.packages(&quot;ggplot2&quot;)</code></pre>
-<p>After installing it, you can remove the <code>if</code> conditions in the next code chunks.</p>
-<pre class="r"><code>if (&quot;ggplot2&quot; %in% rownames(installed.packages())) {
-  
-  # Laod plotting library
-  library(ggplot2)
-
-  # Print data
-  mpg
-  
-  }</code></pre>
-<pre><code>## # A tibble: 234 x 11
-##    manufacturer model    displ  year   cyl trans   drv     cty   hwy fl    class
-##    &lt;chr&gt;        &lt;chr&gt;    &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
-##  1 audi         a4         1.8  1999     4 auto(l~ f        18    29 p     comp~
-##  2 audi         a4         1.8  1999     4 manual~ f        21    29 p     comp~
-##  3 audi         a4         2    2008     4 manual~ f        20    31 p     comp~
-##  4 audi         a4         2    2008     4 auto(a~ f        21    30 p     comp~
-##  5 audi         a4         2.8  1999     6 auto(l~ f        16    26 p     comp~
-##  6 audi         a4         2.8  1999     6 manual~ f        18    26 p     comp~
-##  7 audi         a4         3.1  2008     6 auto(a~ f        18    27 p     comp~
-##  8 audi         a4 quat~   1.8  1999     4 manual~ 4        18    26 p     comp~
-##  9 audi         a4 quat~   1.8  1999     4 auto(l~ 4        16    25 p     comp~
-## 10 audi         a4 quat~   2    2008     4 manual~ 4        20    28 p     comp~
-## # ... with 224 more rows</code></pre>
-<pre class="r"><code>if (&quot;ggplot2&quot; %in% rownames(installed.packages())) {
-  
-ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
-  geom_point(mapping = aes(color = class)) + 
-  geom_smooth()
-  
-}</code></pre>
-<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="ggplot_graphs_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<p>…</p>
+<p>library(“rvest”) library(“xopen”) url_home = “<a href="https://www.rosebikes.de/fahrräder/mtb" class="uri">https://www.rosebikes.de/fahrräder/mtb</a>”</p>
+<p>#xopen(url_home)</p>
+<p>html_home &lt;- read_html(‘<a href="https://www.rosebikes.de/fahrräder/mtb" class="uri">https://www.rosebikes.de/fahrräder/mtb</a>’)</p>
+#
+<div class="catalog-category-bikes__price">
+#
+<div class="catalog-category-bikes__price-title">
+<div id="ab-1.69900" class="section level1">
+<h1>ab 1.699,00 €</h1>
+<p>bikes &lt;- html_nodes(html_home, css = "li.catalog-category-bikes__list-item“) names = list() prices = list() i=1 for (bike in bikes){ name = html_text(html_node(bike,css=”div.catalog-category-bikes__title“)) name = str_remove_all(name,”")</p>
+<p>price = html_text(html_node(bike, css="div.catalog-category-bikes__price-title“)) price = str_remove_all(price,”“) price = str_remove_all(price,”“) price = str_remove_all(price,” “) price = str_replace_all(price,”[.]“,”“) #price = str_replace_all(price,”,“,”.“) price = str_remove_all(price,”€")</p>
+<p>price_split = str_split(price, “,”)[[1]] if (length(price_split) ==2){ first = price_split[1] last = substring(price_split[2],1,2) price = paste0(first,‘.’,last) price = as.numeric(price) } else { next } names[[i]] = name prices[[i]] = price i = i + 1 }</p>
+<p>df = unnest(tibble(name = names, price = prices),cols=c(name,price))</p>
+</div>
 
 
 
